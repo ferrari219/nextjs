@@ -1,1 +1,7 @@
-# nextjs
+# next.js
+
+```
+nextjs
+ㄴfrontend
+ㄴbackend
+```
