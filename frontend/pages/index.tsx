@@ -39,13 +39,15 @@ export const getStaticProps = async () => {
 };
 
 // export const getServerSideProps = async () => {
-// 	const res = await fetch(`http://localhost:8080/api/posts`);
-// 	const posts = await res.json();
-// 	// console.log(res);
-
-// 	return {
-// 		props: {
-// 			posts: posts,
-// 		},
-// 	};
+// 	try {
+// 		const response = await axios.get('http://localhost:8080/api/posts');
+// 		const data = response.data;
+// 		return {
+// 			props: {
+// 				data: data,
+// 			},
+// 		};
+// 	} catch (error) {
+// 		console.log(error);
+// 	}
 // };
