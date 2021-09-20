@@ -1,5 +1,6 @@
 import React from 'react';
-import { GetStaticPaths, GetStaticProps, GetStaticPropsContext } from 'next';
+import { GetStaticPaths, GetStaticProps } from 'next';
+import { ParsedUrlQuery } from 'querystring';
 import Image from 'next/image';
 import Link from 'next/link';
 import axios from 'axios';
@@ -26,23 +27,22 @@ const index: React.FunctionComponent<IindexProps> = ({ data }) => {
 	);
 };
 
-//js 상태로는 잘 실행되지만, 현재로선 도저히 모르겠음
-type ParsedUrlQuery = {
-	params: string;
-};
-type Data = {
+interface Iparams extends ParsedUrlQuery {
+	data: string;
+}
+interface Data {
 	id: number;
-};
-export const getStaticProps: GetStaticProps = async (
-	context: GetStaticPropsContext<ParsedUrlQuery>
-) => {
+}
+// 공식문서 따라서 만들었지만, 오류 나는 이유 도저히 못찾겠음
+// 일단은 실행 되니까, 추후 방법 찾으면 수정하겠음
+export const getStaticProps: GetStaticProps = async (context) => {
 	try {
-		const { id } = context.params;
+		const { id } = context.params as Iparams;
 		// https://jsonplaceholder.typicode.com/photos/1
 		const response = await axios.get(
 			`https://jsonplaceholder.typicode.com/photos/${id}`
 		);
-		const data: Data[] = response.data;
+		const data: Data = response.data;
 		return {
 			props: {
 				data,
@@ -57,9 +57,8 @@ export const getStaticPaths: GetStaticPaths = async () => {
 	const response = await axios.get(
 		`https://jsonplaceholder.typicode.com/photos?_start=0&_end=10`
 	);
-	const photo = response.data;
-	// console.log(photo);
-	const ids = photo.map((item: Array<{ id: number }>) => item.id);
+	const data = response.data;
+	const ids = data.map((item: { id: number }) => item.id);
 	const paths = ids.map((id: number) => {
 		return {
 			params: { id: id.toString() },
