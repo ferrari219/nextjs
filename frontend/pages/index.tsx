@@ -7,7 +7,16 @@ import styled from 'styled-components';
 const Ul = styled.ul`
 	display: grid;
 	grid-template-columns: repeat(4, 1fr);
+	grid-gap: 1rem;
 	list-style: none;
+	padding: 0;
+	img {
+		width: 100%;
+	}
+	span {
+		display: flex;
+		font-size: 1.2rem;
+	}
 `;
 interface IhomeProps {
 	data: Array<{
@@ -19,7 +28,7 @@ interface IhomeProps {
 }
 
 const Home: NextPage<IhomeProps> = ({ data }) => {
-	console.log(data);
+	// console.log(data);
 	return (
 		<div>
 			<h1>index</h1>
@@ -27,14 +36,16 @@ const Home: NextPage<IhomeProps> = ({ data }) => {
 				{data &&
 					data.map((item) => (
 						<li key={item.id}>
-							<Link href={item.url}>
+							<Link href={`/photos/${item.id}`}>
 								<a>
 									<Image
 										src={item.thumbnailUrl}
-										width={100}
-										height={100}
+										width={500}
+										height={500}
+										// layout="fill"
 										alt={item.title}
 									/>
+									<span>{item.title}</span>
 								</a>
 							</Link>
 						</li>
@@ -49,7 +60,7 @@ export default Home;
 export const getStaticProps = async () => {
 	try {
 		const response = await axios.get(
-			'https://jsonplaceholder.typicode.com/albums/1/photos?_start=0&_end=10'
+			'https://jsonplaceholder.typicode.com/photos?_start=0&_end=10'
 		);
 		const data = response.data;
 		return {
